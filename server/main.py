@@ -16,7 +16,7 @@ class Body(BaseModel):
 
 class Bingo:
     def __init__(self):
-        self.nums = [num for num in range(1, 51)]
+        self.nums = [num for num in range(1, 26)]
         self.__players__ = {}
         self.started = False
         self.current_number = None
@@ -53,7 +53,7 @@ class Bingo:
         return 0, self.current_number
     
     def reset(self):
-        self.nums = [num for num in range(1, 51)]
+        self.nums = [num for num in range(1, 26)]
         self.__players__ = {}
         self.started = False
         self.current_number = None

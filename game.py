@@ -19,7 +19,7 @@ d = []
 a = []
 
 def generate_random_matrix(rows, cols):
-    numbers = list(range(1, 51))
+    numbers = list(range(1, 26))
     random.shuffle(numbers)
     matrix = []
     for _ in range(rows):
@@ -31,7 +31,7 @@ def generate_random_matrix(rows, cols):
 
 name = input("Enter your name: ")
 requests.post(URL + "addPlayer", data=json.dumps({"name": name}))
-mode = input("Do you want to enter 25 numbers (1 - 50) or generate random (m/r): ")
+mode = input("Do you want to enter 25 numbers (1 - 25) or generate random (m/r): ")
 if mode == "r":
     random_matrix = generate_random_matrix(5, 5)
     a = random_matrix
@@ -39,13 +39,13 @@ elif mode == "m":
     for i in range(5):
         b = []
         for j in range(5):
-            c = int(input("Enter a number between 1 and 50: "))
-            while (not (1 <= c <= 50)) or (c in d):
+            c = int(input("Enter a number between 1 and 25: "))
+            while (not (1 <= c <= 25)) or (c in d):
                 if c in d:
                     print("Entered value already exists.")
-                elif not (1 <= c <= 50):
-                    print("Entered value is not in the range 1 to 50.")
-                c = int(input("Enter a number between 1 and 50: "))
+                elif not (1 <= c <= 25):
+                    print("Entered value is not in the range 1 to 25.")
+                c = int(input("Enter a number between 1 and 25: "))
             d.append(c)
             b.append(c)
         a.append(b)
