@@ -123,15 +123,20 @@ while True:
 
     num = int(input("Enter a number to cross: "))
     if num != numberss:
-        print("Number not matched")
-        time.sleep(1)
+        print("Number not matched!")
+        print("Please retry after few seconds...")
+        time.sleep(2)
+        os.system("clear")
     else:
         i, j = get_index(num)
         if i == -1 or j == -1:
             print("Number not found!")
-            time.sleep(1)
+            print("Please retry after few seconds...") 
+            time.sleep(2)
+            os.system("clear") 
         else:
             a[i][j] = f"{Fore.GREEN}{a[i][j]}{Style.RESET_ALL}"
+            os.system("clear")
 
         display_bingo()
 
@@ -142,17 +147,18 @@ while True:
         if check_cross() == "Over":
             print("GAME OVER!!!")
             break
-        print("\n" + "="*100 + "\n")
-        os.system("clear")
+        # print("\n" + "="*100 + "\n")
 
         while True:
             input("Press Enter to check for the next number...")
             next_resp = requests.post(URL + "next", data=json.dumps({"name": name}))
             status = json.loads(next_resp.text).get("message")
             if status:
+                os.system("clear")
                 break
             else:
                 print("Waiting for other players to make their move...")
                 ready_resp = requests.post(URL + "ready", json={"name": name})
                 print(ready_resp.text)      
+                os.system("clear")
                 # time.sleep(1)
