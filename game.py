@@ -72,8 +72,8 @@ while game:
     if op == 4:
         exit()
     if op == 3:
-        resp = requests.post(URL + "ready", data=json.dumps({"name": name}))
-        print(resp.text)
+        requests.post(URL + "ready", data=json.dumps({"name": name}))
+        # print(resp.text)
 
 def display_bingo():
     print()
@@ -118,10 +118,10 @@ while True:
             print("===Not all players are ready.===")
             time.sleep(1)
 
-    print(numberss)
+    print("Your number to cross is:", f"{Fore.GREEN}{numberss}{Style.RESET_ALL}")
     print()
 
-    num = int(input("Enter a number to cross: "))
+    num = int(input("Enter the number to cross: "))
     if num != numberss:
         print("Number not matched!")
         print("Please retry after few seconds...")
@@ -130,7 +130,7 @@ while True:
     else:
         i, j = get_index(num)
         if i == -1 or j == -1:
-            print("Number not found!")
+            print("Wait for other players to make their move...")
             print("Please retry after few seconds...") 
             time.sleep(2)
             os.system("clear") 
@@ -141,8 +141,8 @@ while True:
         display_bingo()
 
         resp_new = requests.post(URL + "crossed", data=json.dumps({"name": name}))
-        print("\n===Made a move===")
-        print(resp_new.text)
+        # print("\n===Made a move===")
+        # print(resp_new.text)
 
         if check_cross() == "Over":
             print("GAME OVER!!!")
@@ -150,15 +150,16 @@ while True:
         # print("\n" + "="*100 + "\n")
 
         while True:
-            input("Press Enter to check for the next number...")
+            input(f"Press {Fore.RED}Enter{Style.RESET_ALL} to get the next number...")
             next_resp = requests.post(URL + "next", data=json.dumps({"name": name}))
             status = json.loads(next_resp.text).get("message")
             if status:
                 os.system("clear")
                 break
             else:
-                print("Waiting for other players to make their move...")
+                print("Wait for other players to make their move...")
                 ready_resp = requests.post(URL + "ready", json={"name": name})
-                print(ready_resp.text)      
+                print(ready_resp.text) 
+                time.sleep(2)
                 os.system("clear")
                 # time.sleep(1)
