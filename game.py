@@ -11,7 +11,7 @@ from colorama import Style
 
 colorama_init()
 
-URL = "http://localhost:8000/"
+URL = "https://bingo-server-rjq4aqttlq-uc.a.run.app/"
 
 print("\tWelcome to Bingo")
 
