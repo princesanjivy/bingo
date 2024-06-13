@@ -1,15 +1,10 @@
 from prettytable import PrettyTable
-import requests
-import json
-import random
-import os
-import time
+import requests, json, random
 
-from colorama import init as colorama_init
-from colorama import Fore
-from colorama import Style
-
-colorama_init()
+#
+# import time 
+# time functionality need to implemented in micro
+#
 
 URL = "https://bingo-server-rjq4aqttlq-uc.a.run.app/"
 
@@ -73,7 +68,6 @@ while game:
         exit()
     if op == 3:
         requests.post(URL + "ready", data=json.dumps({"name": name}))
-        # print(resp.text)
 
 def display_bingo():
     print()
@@ -116,50 +110,48 @@ while True:
             break
         else:
             print("===Not all players are ready.===")
-            time.sleep(1)
+            # time.sleep(1)
 
-    print("Your number to cross is:", f"{Fore.GREEN}{numberss}{Style.RESET_ALL}")
+    print("Your number to cross is:", f"{numberss}")
     print()
 
     num = int(input("Enter the number to cross: "))
     if num != numberss:
         print("Number not matched!")
         print("Please retry after few seconds...")
-        time.sleep(2)
-        os.system("clear")
+        # time.sleep(2)
+        print("$<clear>") # to clear the screeen
     else:
         i, j = get_index(num)
         if i == -1 or j == -1:
             print("Wait for other players to make their move...")
             print("Please retry after few seconds...") 
-            time.sleep(2)
-            os.system("clear") 
+            # time.sleep(2)
+            print("$<clear>") # to clear the screeen 
         else:
-            a[i][j] = f"{Fore.GREEN}{a[i][j]}{Style.RESET_ALL}"
-            os.system("clear")
+            a[i][j] = f"x{a[i][j]}x" # make a cross
+            print("$<clear>") # to clear the screeen
 
         display_bingo()
 
         resp_new = requests.post(URL + "crossed", data=json.dumps({"name": name}))
-        # print("\n===Made a move===")
-        # print(resp_new.text)
+
 
         if check_cross() == "Over":
             print("GAME OVER!!!")
             break
-        # print("\n" + "="*100 + "\n")
 
         while True:
-            input(f"Press {Fore.RED}Enter{Style.RESET_ALL} to get the next number...")
+            input(f"Press `Enter` to get the next number...")
             next_resp = requests.post(URL + "next", data=json.dumps({"name": name}))
             status = json.loads(next_resp.text).get("message")
             if status:
-                os.system("clear")
+                print("$<clear>") # to clear the screeen
                 break
             else:
                 print("Wait for other players to make their move...")
                 ready_resp = requests.post(URL + "ready", json={"name": name})
                 print(ready_resp.text) 
-                time.sleep(2)
-                os.system("clear")
-                # time.sleep(1)
+                # time.sleep(2)
+                print("$<clear>") # to clear the screeen
+
