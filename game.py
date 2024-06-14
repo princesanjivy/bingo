@@ -11,7 +11,7 @@ from colorama import Style
 
 colorama_init()
 
-URL = "http://localhost:8000/"
+URL = "https://9f70-162-216-141-55.ngrok-free.app/"
 
 print("\tWelcome to Bingo")
 
@@ -28,6 +28,11 @@ def generate_random_matrix(rows, cols):
             row.append(numbers.pop())
         matrix.append(row)
     return matrix
+
+def request_get (msg):
+    resp = requests.get(URL + msg)
+    p = json.loads(resp.text)
+    return p
 
 name = input("Enter your name: ")
 requests.post(URL + "addPlayer", data=json.dumps({"name": name}))
@@ -58,12 +63,9 @@ while game:
     print("\n1. Start\n2. Show Players\n3. Ready\n4. Exit")
     op = int(input("Enter your option: "))
     if op == 2:
-        resp = requests.get(URL + "players")
-        p = json.loads(resp.text)
-        print(p)
+        request_get("players")
     if op == 1:
-        resp = requests.get(URL + "start")
-        p = json.loads(resp.text)
+        p = request_get("start")
         if p.get("message") == "start":
             game = False
         else:
@@ -109,8 +111,7 @@ while True:
     display_bingo()
 
     while True:
-        resp = requests.get(URL + "numbers")
-        message = json.loads(resp.text).get("message")
+        message = request_get("numbers").get("message")
         if isinstance(message, dict) and "numbers" in message:
             numberss = message.get("numbers")
             break
@@ -143,7 +144,7 @@ while True:
             print("GAME OVER!!!")
             break
         print("\n" + "="*100 + "\n")
-        os.system("clear")
+        os.system("cls")
 
         while True:
             input("Press Enter to check for the next number...")
@@ -156,3 +157,9 @@ while True:
                 ready_resp = requests.post(URL + "ready", json={"name": name})
                 print(ready_resp.text)      
                 # time.sleep(1)
+ 
+
+
+
+    
+    
