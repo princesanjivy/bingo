@@ -55,6 +55,7 @@ class Bingo:
     def reset(self):
         self.nums = [num for num in range(1, 26)]
         self.__players__ = {}
+        self.played = {}
         self.started = False
         self.current_number = None
         self.all_played_once = False

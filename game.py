@@ -11,7 +11,7 @@ from colorama import Style
 
 colorama_init()
 
-URL = "http://localhost:8000/"
+URL = "https://bingo-server-rjq4aqttlq-uc.a.run.app/"
 
 print("\tWelcome to Bingo")
 
@@ -122,20 +122,28 @@ while True:
             print("===Not all players are ready.===")
             time.sleep(1)
 
-    print(numberss)
+    print("Your number to cross is:", f"{Fore.GREEN}{numberss}{Style.RESET_ALL}")
     print()
 
-    num = int(input("Enter a number to cross: "))
+    try:
+        num = int(input("Enter a number to cross: "))
+    except:
+        print("Enter The given valid number to cross",end="")
     if num != numberss:
-        print("Number not matched")
-        time.sleep(1)
+        print("Number not matched!")
+        print("Please retry after few seconds...")
+        time.sleep(2)
+        os.system("clear")
     else:
         i, j = get_index(num)
         if i == -1 or j == -1:
-            print("Number not found!")
-            time.sleep(1)
+            print("Wait for other players to make their move...")
+            print("Please retry after few seconds...") 
+            time.sleep(2)
+            os.system("clear") 
         else:
             a[i][j] = f"{Fore.GREEN}{a[i][j]}{Style.RESET_ALL}"
+            os.system("clear")
 
         display_bingo()
 
@@ -146,17 +154,20 @@ while True:
         if check_cross() == "Over":
             print("GAME OVER!!!")
             break
-        print("\n" + "="*100 + "\n")
-        os.system("cls")
+            
+        # print("\n" + "="*100 + "\n")
 
         while True:
             input("Press Enter to check for the next number...")
             next_resp = send_request("next", {"name": name})
             status = json.loads(next_resp.text).get("message")
             if status:
+                os.system("clear")
                 break
             else:
                 print("Waiting for other players to make their move...")
                 ready_resp = send_request("ready", {"name": name})
-                print(ready_resp.text)      
+                print(ready_resp.text) 
+                time.sleep(2)
+                os.system("clear")
                 # time.sleep(1)
