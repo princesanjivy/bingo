@@ -11,7 +11,7 @@ from colorama import Style
 
 colorama_init()
 
-URL = "http://localhost:8000/"
+URL = "https://9f70-162-216-141-55.ngrok-free.app/"
 
 print("\tWelcome to Bingo")
 
@@ -121,7 +121,10 @@ while True:
     print(numberss)
     print()
 
-    num = int(input("Enter a number to cross: "))
+    try:
+        num = int(input("Enter a number to cross: "))
+    except:
+        print("Enter The given valid number to cross",end="")
     if num != numberss:
         print("Number not matched")
         time.sleep(1)
@@ -143,7 +146,7 @@ while True:
             print("GAME OVER!!!")
             break
         print("\n" + "="*100 + "\n")
-        os.system("clear")
+        os.system("cls")
 
         while True:
             input("Press Enter to check for the next number...")
