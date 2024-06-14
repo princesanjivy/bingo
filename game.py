@@ -121,7 +121,10 @@ while True:
     print("Your number to cross is:", f"{Fore.GREEN}{numberss}{Style.RESET_ALL}")
     print()
 
-    num = int(input("Enter the number to cross: "))
+    try:
+        num = int(input("Enter a number to cross: "))
+    except:
+        print("Enter The given valid number to cross",end="")
     if num != numberss:
         print("Number not matched!")
         print("Please retry after few seconds...")
