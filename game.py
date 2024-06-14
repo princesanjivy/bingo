@@ -11,7 +11,7 @@ from colorama import Style
 
 colorama_init()
 
-URL = "https://9f70-162-216-141-55.ngrok-free.app/"
+URL = "https://bingo-server-rjq4aqttlq-uc.a.run.app/"
 
 print("\tWelcome to Bingo")
 
@@ -34,8 +34,12 @@ def request_get (msg):
     p = json.loads(resp.text)
     return p
 
+def send_request(endpoint, data):
+    response = requests.post(URL + endpoint, data=json.dumps(data))
+    return response
+
 name = input("Enter your name: ")
-requests.post(URL + "addPlayer", data=json.dumps({"name": name}))
+send_request("addPlayer", {"name": name})
 mode = input("Do you want to enter 25 numbers (1 - 25) or generate random (m/r): ")
 if mode == "r":
     random_matrix = generate_random_matrix(5, 5)
@@ -74,7 +78,7 @@ while game:
     if op == 4:
         exit()
     if op == 3:
-        resp = requests.post(URL + "ready", data=json.dumps({"name": name}))
+        resp = send_request("ready", {"name": name})
         print(resp.text)
 
 def display_bingo():
@@ -119,43 +123,54 @@ while True:
             print("===Not all players are ready.===")
             time.sleep(1)
 
-    print(numberss)
+    print("Your number to cross is:", f"{Fore.GREEN}{numberss}{Style.RESET_ALL}")
     print()
 
-    num = int(input("Enter a number to cross: "))
+    try:
+        num = int(input("Enter a number to cross: "))
+    except:
+        print("Enter The given valid number to cross",end="")
     if num != numberss:
-        print("Number not matched")
-        time.sleep(1)
+        print("Number not matched!")
+        print("Please retry after few seconds...")
+        time.sleep(2)
+        os.system("clear")
     else:
         i, j = get_index(num)
         if i == -1 or j == -1:
-            print("Number not found!")
-            time.sleep(1)
+            print("Wait for other players to make their move...")
+            print("Please retry after few seconds...") 
+            time.sleep(2)
+            os.system("clear") 
         else:
             a[i][j] = f"{Fore.GREEN}{a[i][j]}{Style.RESET_ALL}"
+            os.system("clear")
 
         display_bingo()
 
-        resp_new = requests.post(URL + "crossed", data=json.dumps({"name": name}))
+        resp_new = send_request("crossed", {"name": name})
         print("\n===Made a move===")
         print(resp_new.text)
 
         if check_cross() == "Over":
             print("GAME OVER!!!")
             break
-        print("\n" + "="*100 + "\n")
-        os.system("cls")
+            
+        # print("\n" + "="*100 + "\n")
 
         while True:
             input("Press Enter to check for the next number...")
-            next_resp = requests.post(URL + "next", data=json.dumps({"name": name}))
+            next_resp = send_request("next", {"name": name})
             status = json.loads(next_resp.text).get("message")
             if status:
+                os.system("clear")
                 break
             else:
                 print("Waiting for other players to make their move...")
-                ready_resp = requests.post(URL + "ready", json={"name": name})
-                print(ready_resp.text)      
+                ready_resp = send_request("ready", {"name": name})
+                print(ready_resp.text) 
+                time.sleep(2)
+                os.system("clear")
                 # time.sleep(1)
  
 
