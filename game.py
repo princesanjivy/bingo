@@ -29,8 +29,12 @@ def generate_random_matrix(rows, cols):
         matrix.append(row)
     return matrix
 
+def send_request(endpoint, data):
+    response = requests.post(URL + endpoint, data=json.dumps(data))
+    return response
+
 name = input("Enter your name: ")
-requests.post(URL + "addPlayer", data=json.dumps({"name": name}))
+send_request("addPlayer", {"name": name})
 mode = input("Do you want to enter 25 numbers (1 - 25) or generate random (m/r): ")
 if mode == "r":
     random_matrix = generate_random_matrix(5, 5)
@@ -72,8 +76,8 @@ while game:
     if op == 4:
         exit()
     if op == 3:
-        requests.post(URL + "ready", data=json.dumps({"name": name}))
-        # print(resp.text)
+        resp = send_request("ready", {"name": name})
+        print(resp.text)
 
 def display_bingo():
     print()
@@ -143,25 +147,26 @@ while True:
 
         display_bingo()
 
-        resp_new = requests.post(URL + "crossed", data=json.dumps({"name": name}))
-        # print("\n===Made a move===")
-        # print(resp_new.text)
+        resp_new = send_request("crossed", {"name": name})
+        print("\n===Made a move===")
+        print(resp_new.text)
 
         if check_cross() == "Over":
             print("GAME OVER!!!")
             break
+            
         # print("\n" + "="*100 + "\n")
 
         while True:
-            input(f"Press {Fore.RED}Enter{Style.RESET_ALL} to get the next number...")
-            next_resp = requests.post(URL + "next", data=json.dumps({"name": name}))
+            input("Press Enter to check for the next number...")
+            next_resp = send_request("next", {"name": name})
             status = json.loads(next_resp.text).get("message")
             if status:
                 os.system("clear")
                 break
             else:
-                print("Wait for other players to make their move...")
-                ready_resp = requests.post(URL + "ready", json={"name": name})
+                print("Waiting for other players to make their move...")
+                ready_resp = send_request("ready", {"name": name})
                 print(ready_resp.text) 
                 time.sleep(2)
                 os.system("clear")
